@@ -4,11 +4,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import androidx.room.Database
-import com.ds.foodreceiptapp.data.database.RecipesEntity
+import com.ds.foodreceiptapp.data.database.entity.RecipesEntity
 import com.ds.foodreceiptapp.modeljson.FoodRecipe
 import com.ds.foodreceiptapp.util.NetworkResult
-import retrofit2.Response
 
 class RecipesBinding {
 

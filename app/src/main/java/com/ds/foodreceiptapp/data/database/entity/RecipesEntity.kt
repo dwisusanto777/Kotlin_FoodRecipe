@@ -1,4 +1,4 @@
-package com.ds.foodreceiptapp.data.database
+package com.ds.foodreceiptapp.data.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

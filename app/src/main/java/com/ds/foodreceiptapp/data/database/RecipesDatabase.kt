@@ -3,6 +3,7 @@ package com.ds.foodreceiptapp.data.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.ds.foodreceiptapp.data.database.entity.RecipesEntity
 
 @Database(
     entities = [RecipesEntity::class],

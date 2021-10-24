@@ -7,6 +7,8 @@ class ParameterSetting {
         const val BASE_IMAGE_URL = "https://spoonacular.com/cdn/ingredients_100x100/"
         const val KEY = "817a08aac6874992b34832d5a8101bfa"
 
+        const val RECIPE_RESULT_KEY = "recipeBundle"
+
         // API Query Keys
         const val QUERY_SEARCH = "query"
         const val QUERY_NUMBER = "number"
@@ -19,6 +21,7 @@ class ParameterSetting {
         //ROOM Database
         const val DATABASE_NAME = "recipes_database"
         const val RECIPES_TABLE = "recipes_table"
+        const val FAVORITE_RECIPES_TABLE = "favorite_recipes_table"
 
         // bottom sheet and preferences
         const val DEFAULT_RECIPES_NUMBER = "50"
