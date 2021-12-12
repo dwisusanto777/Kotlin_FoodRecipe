@@ -5,62 +5,64 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import coil.load
 import com.ds.foodreceiptapp.R
+import com.ds.foodreceiptapp.bindingadapters.RecipesRowBinding
+import com.ds.foodreceiptapp.databinding.FragmentInstructionsBinding
+import com.ds.foodreceiptapp.databinding.FragmentOverviewBinding
 import com.ds.foodreceiptapp.modeljson.Result
 import com.ds.foodreceiptapp.util.ParameterSetting.Companion.RECIPE_RESULT_KEY
-import kotlinx.android.synthetic.main.fragment_overview.view.*
 import org.jsoup.Jsoup
 
 class OverviewFragment : Fragment() {
 
+    private var _binding: FragmentOverviewBinding? = null
+    private val binding get() = _binding !!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        val view  = inflater.inflate(R.layout.fragment_overview, container, false)
+        _binding  = FragmentOverviewBinding.inflate(inflater, container, false)
 
         val args = arguments
-        val myBundle: Result? = args?.getParcelable(RECIPE_RESULT_KEY)
+        val myBundle: Result = args!!.getParcelable<Result>(RECIPE_RESULT_KEY) as Result
 
-        view.main_imageView.load(myBundle?.image)
-        view.title_textView.text = myBundle?.title
-        view.likes_textView.text = myBundle?.aggregateLikes.toString()
-        view.time_textView.text = myBundle?.readyInMinutes.toString()
-        myBundle?.summary.let {
-            val summary = Jsoup.parse(it).text()
-            view.summarry_textView.text = summary
-        }
-        view.summarry_textView.text = myBundle?.summary
+        binding.mainImageView.load(myBundle.image)
+        binding.titleTextView.text = myBundle.title
+        binding.likesTextView.text = myBundle.aggregateLikes.toString()
+        binding.timeTextView.text = myBundle.readyInMinutes.toString()
+//        myBundle?.summary.let {
+//            val summary = Jsoup.parse(it).text()
+//            binding.summarryTextView.text = summary
+//        }
+        RecipesRowBinding.parseHtml(binding.summarryTextView, myBundle.summary)
+        binding.summarryTextView.text = myBundle?.summary
 
-        if(myBundle?.vegetarian == true){
-            view.vegetarian_imageView.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green))
-            view.vegetarian_textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
-        }
-        if(myBundle?.vegan == true){
-            view.vegan_imageView.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green))
-            view.vegan_textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
-        }
-        if(myBundle?.glutenFree == true){
-            view.gluten_imageView.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green))
-            view.gluten_textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
-        }
-        if(myBundle?.dairyFree == true){
-            view.diary_imageView.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green))
-            view.diary_textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
-        }
-        if(myBundle?.veryHealthy == true){
-            view.healty_imageView.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green))
-            view.healty_textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
-        }
-        if(myBundle?.cheap == true){
-            view.cheap_imageView.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green))
-            view.cheap_textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
-        }
+        updateColors(myBundle.vegetarian, binding.vegetarianTextView, binding.vegetarianImageView)
+        updateColors(myBundle.vegan, binding.veganTextView, binding.veganImageView)
+        updateColors(myBundle.glutenFree, binding.glutenTextView, binding.glutenImageView)
+        updateColors(myBundle.dairyFree, binding.diaryTextView, binding.diaryImageView)
+        updateColors(myBundle.veryHealthy, binding.healtyTextView, binding.healtyImageView)
+        updateColors(myBundle.cheap, binding.cheapTextView, binding.cheapImageView)
 
-        return view
+        return binding.root
+    }
+
+    private fun updateColors(stateIsOn: Boolean, tv: TextView, iv:ImageView){
+        if (stateIsOn){
+            iv.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green))
+            tv.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
     
 }

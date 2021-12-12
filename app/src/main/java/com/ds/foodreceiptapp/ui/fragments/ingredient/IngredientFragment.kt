@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ds.foodreceiptapp.R
 import com.ds.foodreceiptapp.adapters.IngredientsAdapter
+import com.ds.foodreceiptapp.databinding.FragmentIngredientBinding
 import com.ds.foodreceiptapp.modeljson.Result
 import com.ds.foodreceiptapp.util.ParameterSetting.Companion.RECIPE_RESULT_KEY
-import kotlinx.android.synthetic.main.fragment_ingredient.view.*
 
 class IngredientFragment : Fragment() {
 
@@ -18,27 +18,36 @@ class IngredientFragment : Fragment() {
         IngredientsAdapter()
     }
 
+    private var _binding: FragmentIngredientBinding? = null
+    private val binding get() = _binding !!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_ingredient, container, false)
+        _binding = FragmentIngredientBinding.inflate(inflater, container, false)
 
         val args = arguments
         val myBundle: Result? = args?.getParcelable(RECIPE_RESULT_KEY)
 
-        setupRecyclerView(view)
+        setupRecyclerView()
         myBundle?.extendedIngredients?.let {
             mAdapter.setData(it)
         }
 
-        return view
+        return binding.root
     }
 
-    private fun setupRecyclerView(view: View){
-        view.ingredients_recyclerView.adapter = mAdapter
-        view.ingredients_recyclerView.layoutManager = LinearLayoutManager(requireContext())
+    private fun setupRecyclerView(){
+        binding.ingredientsRecyclerView.adapter = mAdapter
+        binding.ingredientsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+//        mAdapter.clearContextualActionMode()
     }
 
 }

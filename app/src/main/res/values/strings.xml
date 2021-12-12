@@ -2,4 +2,6 @@
     <string name="app_name">Food Receipt App</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="delete_favorite_menu">Delete Favorite Menu</string>
+    <string name="delete_all">Delete All</string>
 </resources>

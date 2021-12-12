@@ -2,7 +2,9 @@ package com.ds.foodreceiptapp.data.database
 
 import androidx.room.*
 import com.ds.foodreceiptapp.data.database.entity.FavoritesEntity
+import com.ds.foodreceiptapp.data.database.entity.FoodJokeEntity
 import com.ds.foodreceiptapp.data.database.entity.RecipesEntity
+import com.ds.foodreceiptapp.modeljson.FoodJoke
 import com.ds.foodreceiptapp.util.ParameterSetting.Companion.FAVORITE_RECIPES_TABLE
 import kotlinx.coroutines.flow.Flow
 
@@ -26,4 +28,10 @@ interface RecipesDao {
 
     @Query("DELETE FROM favorite_recipes_table")
     suspend fun deleteAllFavoritesRecipes()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFoodJoke(foodJokeEntity: FoodJokeEntity)
+
+    @Query("SELECT * FROM food_joke_table ORDER BY id ASC")
+    fun readFoodJoke(): Flow<List<FoodJokeEntity>>
 }

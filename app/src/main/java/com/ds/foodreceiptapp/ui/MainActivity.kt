@@ -9,6 +9,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.ds.foodreceiptapp.R
 import com.ds.foodreceiptapp.databinding.ActivityMainBinding
+import com.ds.foodreceiptapp.databinding.RecipesBottomSheetBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,9 +20,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_FoodReceiptApp)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+//        val view = binding.root
+        setContentView(binding.root)
         navController = findNavController(R.id.navHostFragment)
         val appBarConfiguration = AppBarConfiguration(
             setOf(

@@ -32,7 +32,7 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
     private val args by navArgs<RecipesFragmentArgs>()
 
     private var _binding : FragmentRecipesBinding? = null
-    private val binding = _binding
+    private val binding = _binding !!
 
     private lateinit var mainViewModel: MainViewModel
     private lateinit var recipesViewModel: RecipesViewModel
@@ -52,11 +52,11 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentRecipesBinding.inflate(inflater, container, false)
-        binding?.lifecycleOwner = this
-        binding?.mainViewModel = mainViewModel
+        binding.lifecycleOwner = this
+        binding.mainViewModel = mainViewModel
 
         setHasOptionsMenu(true)
 
@@ -68,7 +68,7 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
             recipesViewModel.backOnline = it
         })
 
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             networkListener = NetworkListener()
             networkListener.checkNetworkAvailability(requireContext())
                 .collect { status->
@@ -80,7 +80,7 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
         }
 
 
-        binding?.recipesFab?.setOnClickListener {
+        binding.recipesFab.setOnClickListener {
             if(recipesViewModel.networkStatus){
                 findNavController().navigate(R.id.action_recipesFragment_to_recipesBottomSheet)
             }else{
@@ -88,7 +88,7 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
             }
         }
 
-        return binding?.root
+        return binding.root
     }
 
 
@@ -126,6 +126,7 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
                 is NetworkResult.Success->{
                     hideShimmerEffect()
                     r.data?.let { mAdapter.setData(it) }
+                    recipesViewModel.saveMealAndDietType()
                 }
                 is NetworkResult.Error->{
                     hideShimmerEffect()
@@ -161,7 +162,6 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
 
-
     private fun setupRecyclerView(){
         binding?.recyclerView?.adapter = mAdapter
         binding?.recyclerView?.layoutManager = LinearLayoutManager(requireContext())
@@ -169,14 +169,18 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun showShimmerEffect(){
-        binding?.recyclerView?.showShimmer()
+        binding.shimmerFrameLayout.startShimmer()
+        binding.recyclerView.visibility = View.GONE
+//        binding?.recyclerView?.showShimmer()
     }
     private fun hideShimmerEffect(){
-        binding?.recyclerView?.hideShimmer()
+        binding.shimmerFrameLayout.stopShimmer()
+        binding.recyclerView.visibility = View.VISIBLE
+//        binding?.recyclerView?.hideShimmer()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 
